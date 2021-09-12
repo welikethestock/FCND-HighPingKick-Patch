@@ -15,8 +15,6 @@ DWORD FindPID()
     {
         while (Process32Next(Snapshot, &Entry) == TRUE)
         {
-            printf_s("%s\n", Entry.szExeFile);
-
             if (stricmp(Entry.szExeFile, "FarCryNewDawn.exe") == 0)
             {
                 CloseHandle(Snapshot);
