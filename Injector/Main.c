@@ -1,30 +1,34 @@
-#include <Windows.h>
-#include <TlHelp32.h>
+#include <windows.h>
 #include <stdio.h>
+#include <tchar.h>
+#include <psapi.h>
+#include <TlHelp32.h>
 
-DWORD GetProcessID(const wchar_t* ProcessName)
+DWORD FindPID()
 {
-    HANDLE Snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
-
     PROCESSENTRY32 Entry;
     Entry.dwSize = sizeof(PROCESSENTRY32);
 
-    if (Process32First(Snapshot, &Entry))
+    HANDLE Snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+
+    if (Process32First(Snapshot, &Entry) == TRUE)
     {
-        do
+        while (Process32Next(Snapshot, &Entry) == TRUE)
         {
-            if (wcscmp(Entry.szExeFile, ProcessName) == 0)
+            printf_s("%s\n", Entry.szExeFile);
+
+            if (stricmp(Entry.szExeFile, "FarCryNewDawn.exe") == 0)
             {
                 CloseHandle(Snapshot);
 
                 return Entry.th32ProcessID;
             }
-        } while (Process32Next(Snapshot, &Entry));
+        }
     }
 
     CloseHandle(Snapshot);
 
-    return NULL;
+    Sleep(100);
 }
 
 #define PATCH_FILE  "Patch.dll\0by razor :) 76561198041755013"
@@ -46,7 +50,7 @@ int main()
     DWORD ProcessID = NULL;
     do
     {
-        ProcessID = GetProcessID(L"FarCryNewDawn.exe");
+        ProcessID = FindPID();
 
         Sleep(1);
     } while (ProcessID == NULL);
