@@ -8,3 +8,5 @@ Launch the game, go into singleplayer first then run the Injector.exe as admin. 
 Then have your partner join and enjoy finally being able to play together :)
 
 (Only the host needs to have the patch injected.)
+
+Thanks to https://steamcommunity.com/profiles/76561198258793406/ for testing
